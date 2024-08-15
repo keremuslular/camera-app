@@ -12,6 +12,9 @@
 		0566F5302C6D5ABD0017947B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0566F52F2C6D5ABD0017947B /* Assets.xcassets */; };
 		0566F5332C6D5ABD0017947B /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 0566F5322C6D5ABD0017947B /* Base */; };
 		0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F53A2C6D5D770017947B /* CameraViewController.swift */; };
+		05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FEC2C6E35290007D817 /* CameraManager.swift */; };
+		05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FEE2C6E398B0007D817 /* AlertUtility.swift */; };
+		05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		0566F5322C6D5ABD0017947B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0566F5342C6D5ABD0017947B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0566F53A2C6D5D770017947B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		05C13FEC2C6E35290007D817 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		05C13FEE2C6E398B0007D817 /* AlertUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertUtility.swift; sourceTree = "<group>"; };
+		05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopViewControllerUtility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +107,7 @@
 		0566F5422C6D60320017947B /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FEC2C6E35290007D817 /* CameraManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -108,6 +115,8 @@
 		0566F5432C6D605D0017947B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FEE2C6E398B0007D817 /* AlertUtility.swift */,
+				05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -200,7 +209,10 @@
 			files = (
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
+				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
+				05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */,
 				0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */,
+				05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
