@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController(rootViewController: CameraViewController())
-        navigationController.navigationBar.backgroundColor = .black
+//        navigationController.navigationBar.backgroundColor = .black
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
