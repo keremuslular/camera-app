@@ -1,19 +1,19 @@
 //
-//  ViewController.swift
+//  CameraViewController.swift
 //  camera-app
 //
 //  Created by Kerem Uslular on 15.08.2024.
 //
 
+import Foundation
 import UIKit
 
-class ViewController: UIViewController {
-
+class CameraViewController: UIViewController {
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        view.backgroundColor = .green
     }
-
-
 }
-
