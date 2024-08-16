@@ -68,7 +68,7 @@ class CameraViewController: UIViewController {
         }
     }
     
-    @objc private func captureButtonTapped() {
+    @objc func captureButtonTapped() {
         if isCapturing {
             cameraManager.pauseUnpauseCapturing()
             updateCaptureButtonTitle()

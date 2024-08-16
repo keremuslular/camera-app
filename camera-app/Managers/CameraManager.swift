@@ -11,13 +11,19 @@ import UIKit
 
 class CameraManager: NSObject {
     var captureSession: AVCaptureSession?
+    
     let photoOutput = AVCapturePhotoOutput()
+    let captureQueue = DispatchQueue(label: "com.camera.captureQueue", qos: .userInitiated)
     
     var captureTimer: Timer?
     var isPaused = false
     var elapsedTime: TimeInterval = 0
     var maxCaptureDuration: TimeInterval = 60
     var startTime: Date?
+    
+    let targetDimention = CMVideoDimensions(width: 3000, height: 4000)
+    
+    // MARK: - Session Functions
     
     func setupSession() {
         captureSession = AVCaptureSession()
@@ -26,8 +32,8 @@ class CameraManager: NSObject {
             return
         }
         
-        captureSession.sessionPreset = .photo
-        
+        captureSession.sessionPreset = .high
+
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
             return
@@ -44,11 +50,25 @@ class CameraManager: NSObject {
             
             if captureSession.canAddOutput(photoOutput) {
                 captureSession.addOutput(photoOutput)
+                photoOutput.isHighResolutionCaptureEnabled = true
+                photoOutput.maxPhotoQualityPrioritization = .speed
+                if #available(iOS 16.0, *) {
+                    let supportedDimensions = camera.activeFormat.supportedMaxPhotoDimensions
+                    
+                    // Choose closest to targetDimention
+                    let desiredDimensions = targetDimention
+                    if let closestMatch = supportedDimensions.min(by: {
+                        abs($0.width - desiredDimensions.width) + abs($0.height - desiredDimensions.height) <
+                        abs($1.width - desiredDimensions.width) + abs($1.height - desiredDimensions.height)
+                    }) {
+                        photoOutput.maxPhotoDimensions = closestMatch
+                        print("Set maxPhotoDimensions to: \(closestMatch.width)x\(closestMatch.height)")
+                    }
+                }
             } else {
                 AlertUtility.show(title: "Output Error", message: "Failed to add photo output to capture session.")
                 return
             }
-            
         } catch {
             AlertUtility.show(title: "Setup Error", message: "Error setting up camera input: \(error.localizedDescription)")
             return
@@ -58,17 +78,11 @@ class CameraManager: NSObject {
     func requestCameraPermission(completion: @escaping (Bool) -> Void) {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            setupSession()
             completion(true)
-            
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
-                if granted {
-                    self.setupSession()
-                }
                 completion(granted)
             }
-            
         case .denied, .restricted:
             let settingsAction = UIAlertAction(title: "Settings", style: .default) { _ in
                 guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
@@ -82,7 +96,6 @@ class CameraManager: NSObject {
                 actions: [settingsAction]
             )
             completion(false)
-            
         @unknown default:
             fatalError("Unknown authorization status for camera access.")
         }
@@ -103,6 +116,8 @@ class CameraManager: NSObject {
             captureSession.stopRunning()
         }
     }
+    
+    // MARK: - Capture Functions
     
     func startCapturing() {
         guard captureTimer == nil else { return }
@@ -140,22 +155,23 @@ class CameraManager: NSObject {
     }
     
     @objc func capturePhoto() {
-        let settings = AVCapturePhotoSettings()
-        photoOutput.capturePhoto(with: settings, delegate: self)
-    }
-}
+        let settings: AVCapturePhotoSettings
 
-extension CameraManager: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let imageData = photo.fileDataRepresentation() else { return }
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.saveImageToDisk(imageData)
+        if #available(iOS 16.0, *) {
+            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+        } else {
+            settings = AVCapturePhotoSettings()
+        }
+
+        settings.isHighResolutionPhotoEnabled = true
+                
+        // Capture photo in the background
+        captureQueue.async {
+            self.photoOutput.capturePhoto(with: settings, delegate: self)
         }
     }
     
-    // TODO: Implement image storage logic
-    // Temporarily adds images to files in device
+    // MARK: - Storage Functions
     func saveImageToDisk(_ imageData: Data) {
         let fileManager = FileManager.default
         let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
@@ -164,14 +180,24 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         
         do {
-            if let image = UIImage(data: imageData), let resizedImage = image.resized(to: CGSize(width: 4000, height: 3000)), let resizedImageData = resizedImage.jpegData(compressionQuality: 1.0) {
-                try resizedImageData.write(to: fileURL)
-                print("Image saved to: \(fileURL)")
-            } else {
-                print("Failed to resize the image.")
-            }
+            try imageData.write(to: fileURL)
+            print("Image saved to: \(fileURL)")
         } catch {
             print("Error saving image: \(error)")
+        }
+    }
+}
+
+extension CameraManager: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        
+        if let image = UIImage(data: imageData) {
+            print("Captured image resolution: \(image.size.width)x\(image.size.height)")
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.saveImageToDisk(imageData)
         }
     }
 }
