@@ -12,6 +12,11 @@
 		0566F5302C6D5ABD0017947B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0566F52F2C6D5ABD0017947B /* Assets.xcassets */; };
 		0566F5332C6D5ABD0017947B /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 0566F5322C6D5ABD0017947B /* Base */; };
 		0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F53A2C6D5D770017947B /* CameraViewController.swift */; };
+		05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FEC2C6E35290007D817 /* CameraManager.swift */; };
+		05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FEE2C6E398B0007D817 /* AlertUtility.swift */; };
+		05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */; };
+		05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF22C6E97410007D817 /* UIViewExtension.swift */; };
+		05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF42C6E974F0007D817 /* UIImageExtension.swift */; };
 		BBA70C9F362EE96C6CF573E9 /* Pods_camera_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +28,11 @@
 		0566F5322C6D5ABD0017947B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0566F5342C6D5ABD0017947B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0566F53A2C6D5D770017947B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		05C13FEC2C6E35290007D817 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		05C13FEE2C6E398B0007D817 /* AlertUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertUtility.swift; sourceTree = "<group>"; };
+		05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopViewControllerUtility.swift; sourceTree = "<group>"; };
+		05C13FF22C6E97410007D817 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		05C13FF42C6E974F0007D817 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_camera_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D3D869D9F0D7121DF0EE70 /* Pods-camera-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.debug.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.debug.xcconfig"; sourceTree = "<group>"; };
 		74D8F38D13D492C623F86F4A /* Pods-camera-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.release.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.release.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +118,7 @@
 		0566F5422C6D60320017947B /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FEC2C6E35290007D817 /* CameraManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -115,6 +126,8 @@
 		0566F5432C6D605D0017947B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FEE2C6E398B0007D817 /* AlertUtility.swift */,
+				05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -122,6 +135,8 @@
 		0566F5442C6D60730017947B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FF22C6E97410007D817 /* UIViewExtension.swift */,
+				05C13FF42C6E974F0007D817 /* UIImageExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -141,7 +156,6 @@
 				43D3D869D9F0D7121DF0EE70 /* Pods-camera-app.debug.xcconfig */,
 				74D8F38D13D492C623F86F4A /* Pods-camera-app.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -269,7 +283,12 @@
 			files = (
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
+				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
+				05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */,
+				05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */,
 				0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */,
+				05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */,
+				05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,12 +436,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2CVT63B2DP;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "camera-app/Resources/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera App needs access to your device's camera to capture images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -447,12 +469,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2CVT63B2DP;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "camera-app/Resources/Info.plist";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera App needs access to your device's camera to capture images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
