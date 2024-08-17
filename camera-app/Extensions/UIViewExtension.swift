@@ -18,4 +18,23 @@ extension UIView {
         layer.borderWidth = width
         layer.borderColor = color.cgColor
     }
+    
+    func pulseBorder(with duration: TimeInterval, from: UIColor? = nil, to: UIColor? = nil) {
+        let initialColor = layer.borderColor
+        UIView.animate(withDuration: duration / 2, animations: {
+            if let color = from {
+                self.layer.borderColor = color.cgColor
+            } else {
+                self.layer.borderColor = UIColor.clear.cgColor
+            }
+        }) { _ in
+            UIView.animate(withDuration: duration / 2) {
+                if let color = to {
+                    self.layer.borderColor = color.cgColor
+                } else {
+                    self.layer.borderColor = initialColor
+                }
+            }
+        }
+    }
 }

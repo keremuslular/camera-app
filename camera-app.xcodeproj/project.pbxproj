@@ -17,6 +17,8 @@
 		05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */; };
 		05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF22C6E97410007D817 /* UIViewExtension.swift */; };
 		05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF42C6E974F0007D817 /* UIImageExtension.swift */; };
+		05C13FF72C6F5C460007D817 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF62C6F5C460007D817 /* CaptureButton.swift */; };
+		05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF82C6F71710007D817 /* CaptureTimerView.swift */; };
 		BBA70C9F362EE96C6CF573E9 /* Pods_camera_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +35,8 @@
 		05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopViewControllerUtility.swift; sourceTree = "<group>"; };
 		05C13FF22C6E97410007D817 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		05C13FF42C6E974F0007D817 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		05C13FF62C6F5C460007D817 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		05C13FF82C6F71710007D817 /* CaptureTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTimerView.swift; sourceTree = "<group>"; };
 		192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_camera_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D3D869D9F0D7121DF0EE70 /* Pods-camera-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.debug.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.debug.xcconfig"; sourceTree = "<group>"; };
 		74D8F38D13D492C623F86F4A /* Pods-camera-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.release.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 		0566F53F2C6D60190017947B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				05C13FF62C6F5C460007D817 /* CaptureButton.swift */,
+				05C13FF82C6F71710007D817 /* CaptureTimerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -282,12 +288,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
+				05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
 				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
 				05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */,
 				05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */,
 				0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */,
 				05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */,
+				05C13FF72C6F5C460007D817 /* CaptureButton.swift in Sources */,
 				05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
