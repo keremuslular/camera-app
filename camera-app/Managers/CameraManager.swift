@@ -9,7 +9,14 @@ import Foundation
 import AVFoundation
 import UIKit
 
+protocol CameraManagerDelegate: NSObjectProtocol {
+    func cameraManager(_: CameraManager, didCapture image: UIImage)
+}
+
 class CameraManager: NSObject {
+    weak var delegate: CameraManagerDelegate?
+    
+    let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
     var captureSession: AVCaptureSession?
     
     let photoOutput = AVCapturePhotoOutput()
@@ -23,6 +30,52 @@ class CameraManager: NSObject {
     
     let targetDimention = CMVideoDimensions(width: 3000, height: 4000)
     
+    lazy var ISO: Float? = camera?.iso {
+        didSet {
+            guard let camera = camera else {
+                AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
+                return
+            }
+            
+            do {
+                try camera.lockForConfiguration()
+                if let ISO = ISO {
+                    let clampedISO = max(camera.activeFormat.minISO, min(ISO, camera.activeFormat.maxISO))
+                    camera.setExposureModeCustom(duration: camera.exposureDuration, iso: clampedISO, completionHandler: nil)
+                } else {
+                    camera.exposureMode = .continuousAutoExposure
+                }
+                camera.unlockForConfiguration()
+            } catch {
+                print("Error setting ISO: \(error)")
+            }
+        }
+    }
+    
+    lazy var shutterSpeed: Double? = camera?.exposureDuration.seconds {
+        didSet {
+            guard let camera = camera else {
+                AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
+                return
+            }
+            
+            do {
+                try camera.lockForConfiguration()
+                if let shutterSpeed = shutterSpeed  {
+                    let exposureDuration = CMTimeMake(value: 1, timescale: Int32(1/shutterSpeed))
+                    let clampedISO = max(camera.activeFormat.minISO, min(camera.iso, camera.activeFormat.maxISO))
+                    camera.setExposureModeCustom(duration: exposureDuration, iso: clampedISO, completionHandler: nil)
+                } else {
+                    camera.exposureMode = .continuousAutoExposure
+                }
+                camera.unlockForConfiguration()
+                
+            } catch {
+                print("Error setting shutter speed: \(error)")
+            }
+        }
+    }
+    
     // MARK: - Session Functions
     
     func setupSession() {
@@ -33,8 +86,8 @@ class CameraManager: NSObject {
         }
         
         captureSession.sessionPreset = .high
-
-        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
+        
+        guard let camera = camera else {
             AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
             return
         }
@@ -59,7 +112,7 @@ class CameraManager: NSObject {
                     let desiredDimensions = targetDimention
                     if let closestMatch = supportedDimensions.min(by: {
                         abs($0.width - desiredDimensions.width) + abs($0.height - desiredDimensions.height) <
-                        abs($1.width - desiredDimensions.width) + abs($1.height - desiredDimensions.height)
+                            abs($1.width - desiredDimensions.width) + abs($1.height - desiredDimensions.height)
                     }) {
                         photoOutput.maxPhotoDimensions = closestMatch
                         print("Set maxPhotoDimensions to: \(closestMatch.width)x\(closestMatch.height)")
@@ -139,6 +192,8 @@ class CameraManager: NSObject {
         captureTimer = nil
         isPaused = false
         elapsedTime = 0
+        ISO = nil
+        shutterSpeed = nil
     }
     
     func pauseUnpauseCapturing() {
@@ -154,17 +209,49 @@ class CameraManager: NSObject {
         isPaused.toggle()
     }
     
+    func getSupportedISOs() -> [Float] {
+        guard let camera = camera else { return [] }
+        
+        let minISO = camera.activeFormat.minISO
+        let maxISO = camera.activeFormat.maxISO
+        
+        var isoValues: [Float] = []
+        var currentISO = minISO
+        
+        while currentISO <= maxISO {
+            isoValues.append(currentISO)
+            currentISO *= 2
+        }
+        
+        if !isoValues.contains(maxISO) {
+            isoValues.append(maxISO)
+        }
+        
+        return isoValues
+    }
+    
+    func getSupportedShutterSpeeds() -> [Double] {
+        guard let camera = camera else {
+            return []
+        }
+        let minDuration = camera.activeFormat.minExposureDuration.seconds
+        let maxDuration = camera.activeFormat.maxExposureDuration.seconds
+        let speedSteps: [Double] = [1/1000, 1/500, 1/250, 1/125, 1/60, 1/30, 1/15, 1/8, 1/4] // Common shutter speeds
+        
+        return speedSteps.filter { $0 >= minDuration && $0 <= maxDuration }
+    }
+    
     @objc func capturePhoto() {
         let settings: AVCapturePhotoSettings
-
+        
         if #available(iOS 16.0, *) {
             settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
         } else {
             settings = AVCapturePhotoSettings()
         }
-
+        
         settings.isHighResolutionPhotoEnabled = true
-                
+        
         // Capture photo in the background
         captureQueue.async {
             self.photoOutput.capturePhoto(with: settings, delegate: self)
@@ -194,6 +281,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         
         if let image = UIImage(data: imageData) {
             print("Captured image resolution: \(image.size.width)x\(image.size.height)")
+            delegate?.cameraManager(self, didCapture: image)
         }
         
         DispatchQueue.global(qos: .userInitiated).async {

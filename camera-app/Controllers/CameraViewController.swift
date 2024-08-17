@@ -7,14 +7,73 @@
 
 import Foundation
 import UIKit
-import SnapKit
 import AVFoundation
 
 class CameraViewController: UIViewController {
-    let previewView = UIView()
-    let captureButton = UIButton(type: .system)
+    let previewView: UIView = {
+        let view = UIView()
+        view.cornerRadius(radius: 5.0)
+        view.border(width: 1.0, color: .white.withAlphaComponent(0.5))
+        return view
+    }()
     
-    let cameraManager = CameraManager()
+    let latestImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.cornerRadius(radius: 5.0)
+        iv.border(width: 1.0, color: .white.withAlphaComponent(0.5))
+        iv.contentMode = .scaleAspectFill
+        iv.isHidden = true
+        return iv
+    }()
+    
+    lazy var timerView: CaptureTimerView = {
+        let timer = CaptureTimerView()
+        navigationItem.titleView = timer
+        return timer
+    }()
+    
+    lazy var isoButton: UIBarButtonItem = {
+        let btn = UIBarButtonItem(title: "ISO: AUTO", style: .plain, target: self, action: #selector(isoButtonTapped))
+        btn.setTitleTextAttributes([.font: UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium), .foregroundColor: UIColor.white], for: .normal)
+        return btn
+    }()
+    
+    lazy var shutterSpeedButton: UIBarButtonItem = {
+        let btn = UIBarButtonItem(title: "Shutter: AUTO", style: .plain, target: self, action: #selector(shutterSpeedButtonTapped))
+        btn.setTitleTextAttributes([.font: UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium), .foregroundColor: UIColor.white], for: .normal)
+        return btn
+    }()
+    
+    lazy var captureButton: CaptureButton = {
+        let btn = CaptureButton()
+        btn.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var infoButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .white
+        btn.cornerRadius(radius: 20.0)
+        btn.setImage(UIImage(named: "ic_info"), for: .normal)
+        btn.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var resetButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .white
+        btn.cornerRadius(radius: 20.0)
+        btn.setImage(UIImage(named: "ic_reset"), for: .normal)
+        btn.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var cameraManager: CameraManager = {
+        let manager = CameraManager()
+        manager.delegate = self
+        return manager
+    }()
+    
     var isCapturing = false
     
     override func viewDidLoad() {
@@ -29,22 +88,45 @@ class CameraViewController: UIViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         
-        view.addSubview(previewView)
+        [previewView, latestImageView, captureButton, infoButton, resetButton].forEach(view.addSubview)
+        
         previewView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.leading.trailing.centerX.centerY.equalToSuperview()
+            make.height.equalTo(previewView.snp.width).multipliedBy(4.0 / 3.0)
         }
         
-        captureButton.setTitle("Start Capture", for: .normal)
-        captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
-        view.addSubview(captureButton)
-        captureButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(200)
-            make.height.equalTo(50)
+        latestImageView.snp.makeConstraints { make in
+            make.edges.equalTo(previewView)
         }
+        
+        captureButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20.0)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(80.0)
+        }
+        
+        infoButton.snp.makeConstraints { make in
+            make.centerY.equalTo(captureButton)
+            make.leading.equalToSuperview().inset(40.0)
+            make.width.height.equalTo(40.0)
+        }
+        
+        resetButton.snp.makeConstraints { make in
+            make.centerY.equalTo(captureButton)
+            make.trailing.equalToSuperview().inset(40.0)
+            make.width.height.equalTo(40.0)
+        }
+        
+        timerView.snp.makeConstraints { make in
+            make.width.lessThanOrEqualTo(150.0)
+            make.height.equalTo(40)
+        }
+        
+        navigationItem.leftBarButtonItem = isoButton
+        navigationItem.rightBarButtonItem = shutterSpeedButton
+
     }
     
     func requestCameraAccessAndStartSession() {
@@ -71,20 +153,84 @@ class CameraViewController: UIViewController {
     @objc func captureButtonTapped() {
         if isCapturing {
             cameraManager.pauseUnpauseCapturing()
-            updateCaptureButtonTitle()
+            if cameraManager.isPaused {
+                captureButton.captureState = .paused
+                timerView.pauseTimer()
+                latestImageView.isHidden = false
+            } else {
+                captureButton.captureState = .capturing
+                timerView.startTimer()
+                latestImageView.isHidden = true
+            }
         } else {
+            latestImageView.isHidden = true
             cameraManager.startCapturing()
+            captureButton.captureState = .capturing
+            timerView.startTimer()
             isCapturing = true
-            updateCaptureButtonTitle()
         }
     }
     
-    func updateCaptureButtonTitle() {
-        if cameraManager.isPaused {
-            captureButton.setTitle("Resume Capture", for: .normal)
-        } else {
-            captureButton.setTitle(isCapturing ? "Pause Capture" : "Start Capture", for: .normal)
+    @objc func isoButtonTapped() {
+        let alertController = UIAlertController(title: "Select ISO", message: nil, preferredStyle: .actionSheet)
+        let isoValues = ["AUTO"] + cameraManager.getSupportedISOs().map { "ISO \(Int($0))" }
+
+        isoValues.forEach { iso in
+            alertController.addAction(UIAlertAction(title: iso, style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                if iso == "AUTO" {
+                    self.cameraManager.ISO = nil
+                    self.isoButton.title = "ISO: AUTO"
+                    self.shutterSpeedButton.title = "Shutter: AUTO"
+                } else if let isoValue = Float(iso.replacingOccurrences(of: "ISO ", with: "")) {
+                    self.cameraManager.ISO = isoValue
+                    self.isoButton.title = "ISO: \(Int(isoValue))"
+                }
+            }))
         }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func shutterSpeedButtonTapped() {
+        let alertController = UIAlertController(title: "Select Shutter Speed", message: nil, preferredStyle: .actionSheet)
+        let shutterSpeeds = ["AUTO"] + cameraManager.getSupportedShutterSpeeds().map { "1/\(Int(1/$0)) sec" }
+
+        shutterSpeeds.forEach { speed in
+            alertController.addAction(UIAlertAction(title: speed, style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                if speed == "AUTO" {
+                    self.cameraManager.shutterSpeed = nil
+                    self.isoButton.title = "ISO: AUTO"
+                    self.shutterSpeedButton.title = "Shutter: AUTO"
+                } else if let speedValue = Double(speed.replacingOccurrences(of: "1/", with: "").replacingOccurrences(of: " sec", with: "")) {
+                    self.cameraManager.shutterSpeed = speedValue
+                    self.shutterSpeedButton.title = "Shutter: 1/\(Int(speedValue))"
+                }
+            }))
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func infoButtonTapped() {
+        // TODO: Info screen UI
+        print("info button tapped")
+    }
+    
+    @objc func resetButtonTapped() {
+        cameraManager.stopCapturing()
+        timerView.resetTimer()
+        captureButton.captureState = .initial
+        isCapturing = false
+        isoButton.title = "ISO: AUTO"
+        shutterSpeedButton.title = "Shutter: AUTO"
     }
 }
 
+extension CameraViewController: CameraManagerDelegate {
+    func cameraManager(_: CameraManager, didCapture image: UIImage) {
+        previewView.pulseBorder(with: 0.2, from: .white.withAlphaComponent(0.2))
+        latestImageView.image = image
+    }
+}
