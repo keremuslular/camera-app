@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 
 protocol CameraManagerDelegate: NSObjectProtocol {
-    func cameraManager(_: CameraManager, didCapture image: UIImage)
+    func cameraManagerDidCapture(_: CameraManager)
 }
 
 class CameraManager: NSObject {
@@ -257,35 +257,15 @@ class CameraManager: NSObject {
             self.photoOutput.capturePhoto(with: settings, delegate: self)
         }
     }
-    
-    // MARK: - Storage Functions
-    func saveImageToDisk(_ imageData: Data) {
-        let fileManager = FileManager.default
-        let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        let fileName = "IMG_\(UUID().uuidString).jpg"
-        let fileURL = documentsDirectory.appendingPathComponent(fileName)
-        
-        do {
-            try imageData.write(to: fileURL)
-            print("Image saved to: \(fileURL)")
-        } catch {
-            print("Error saving image: \(error)")
-        }
-    }
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation() else { return }
         
-        if let image = UIImage(data: imageData) {
-            print("Captured image resolution: \(image.size.width)x\(image.size.height)")
-            delegate?.cameraManager(self, didCapture: image)
-        }
-        
         DispatchQueue.global(qos: .userInitiated).async {
-            self.saveImageToDisk(imageData)
+            StorageManager.shared.save(with: imageData)
         }
+        delegate?.cameraManagerDidCapture(self)
     }
 }

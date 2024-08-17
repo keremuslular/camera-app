@@ -157,6 +157,7 @@ class CameraViewController: UIViewController {
                 captureButton.captureState = .paused
                 timerView.pauseTimer()
                 latestImageView.isHidden = false
+                latestImageView.image = StorageManager.shared.getLatest()?.image // FIXME: Ususally gets the second to last photo, because capture is on background thread
             } else {
                 captureButton.captureState = .capturing
                 timerView.startTimer()
@@ -220,17 +221,19 @@ class CameraViewController: UIViewController {
     
     @objc func resetButtonTapped() {
         cameraManager.stopCapturing()
+        StorageManager.shared.deleteAll()
         timerView.resetTimer()
         captureButton.captureState = .initial
         isCapturing = false
+        latestImageView.isHidden = true
+        latestImageView.image = nil
         isoButton.title = "ISO: AUTO"
         shutterSpeedButton.title = "Shutter: AUTO"
     }
 }
 
 extension CameraViewController: CameraManagerDelegate {
-    func cameraManager(_: CameraManager, didCapture image: UIImage) {
-        previewView.pulseBorder(with: 0.2, from: .white.withAlphaComponent(0.2))
-        latestImageView.image = image
+    func cameraManagerDidCapture(_: CameraManager) {
+        previewView.pulseBorder(for: 0.2, from: .white.withAlphaComponent(0.2))
     }
 }
