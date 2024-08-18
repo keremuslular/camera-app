@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		051AE8802C72289700009F67 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AE87F2C72289700009F67 /* ImageCacheManager.swift */; };
 		0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5262C6D5ABC0017947B /* AppDelegate.swift */; };
 		0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5282C6D5ABC0017947B /* SceneDelegate.swift */; };
 		0566F5302C6D5ABD0017947B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0566F52F2C6D5ABD0017947B /* Assets.xcassets */; };
@@ -30,7 +29,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		051AE87F2C72289700009F67 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		0566F5232C6D5ABC0017947B /* camera-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "camera-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0566F5262C6D5ABC0017947B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0566F5282C6D5ABC0017947B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 			children = (
 				05C13FEC2C6E35290007D817 /* CameraManager.swift */,
 				05C13FFA2C709C960007D817 /* StorageManager.swift */,
-				051AE87F2C72289700009F67 /* ImageCacheManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -312,7 +309,6 @@
 				05C140032C713A8B0007D817 /* DateExtension.swift in Sources */,
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
 				05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */,
-				051AE8802C72289700009F67 /* ImageCacheManager.swift in Sources */,
 				05C13FFB2C709C960007D817 /* StorageManager.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
 				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
