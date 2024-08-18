@@ -8,5 +8,6 @@ target 'camera-app' do
   # Pods for camera-app
 
   pod 'SnapKit'
-
+  pod 'Reusable'
+  
 end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051AE8802C72289700009F67 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AE87F2C72289700009F67 /* ImageCacheManager.swift */; };
 		0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5262C6D5ABC0017947B /* AppDelegate.swift */; };
 		0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5282C6D5ABC0017947B /* SceneDelegate.swift */; };
 		0566F5302C6D5ABD0017947B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0566F52F2C6D5ABD0017947B /* Assets.xcassets */; };
@@ -21,10 +22,15 @@
 		05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF82C6F71710007D817 /* CaptureTimerView.swift */; };
 		05C13FFB2C709C960007D817 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FFA2C709C960007D817 /* StorageManager.swift */; };
 		05C13FFD2C70BE100007D817 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FFC2C70BE100007D817 /* Capture.swift */; };
+		05C13FFF2C7100860007D817 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FFE2C7100860007D817 /* InfoViewController.swift */; };
+		05C140012C71046C0007D817 /* CaptureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C140002C71046C0007D817 /* CaptureCollectionViewCell.swift */; };
+		05C140032C713A8B0007D817 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C140022C713A8B0007D817 /* DateExtension.swift */; };
+		05C140052C713C300007D817 /* CapturePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C140042C713C300007D817 /* CapturePreviewViewController.swift */; };
 		BBA70C9F362EE96C6CF573E9 /* Pods_camera_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		051AE87F2C72289700009F67 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		0566F5232C6D5ABC0017947B /* camera-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "camera-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0566F5262C6D5ABC0017947B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0566F5282C6D5ABC0017947B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +47,10 @@
 		05C13FF82C6F71710007D817 /* CaptureTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTimerView.swift; sourceTree = "<group>"; };
 		05C13FFA2C709C960007D817 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		05C13FFC2C70BE100007D817 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
+		05C13FFE2C7100860007D817 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		05C140002C71046C0007D817 /* CaptureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCollectionViewCell.swift; sourceTree = "<group>"; };
+		05C140022C713A8B0007D817 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		05C140042C713C300007D817 /* CapturePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreviewViewController.swift; sourceTree = "<group>"; };
 		192A00BF04F61EE2FE98B184 /* Pods_camera_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_camera_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D3D869D9F0D7121DF0EE70 /* Pods-camera-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.debug.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.debug.xcconfig"; sourceTree = "<group>"; };
 		74D8F38D13D492C623F86F4A /* Pods-camera-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-camera-app.release.xcconfig"; path = "Target Support Files/Pods-camera-app/Pods-camera-app.release.xcconfig"; sourceTree = "<group>"; };
@@ -95,6 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				0566F53A2C6D5D770017947B /* CameraViewController.swift */,
+				05C13FFE2C7100860007D817 /* InfoViewController.swift */,
+				05C140042C713C300007D817 /* CapturePreviewViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -104,6 +116,7 @@
 			children = (
 				05C13FF62C6F5C460007D817 /* CaptureButton.swift */,
 				05C13FF82C6F71710007D817 /* CaptureTimerView.swift */,
+				05C140002C71046C0007D817 /* CaptureCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -131,6 +144,7 @@
 			children = (
 				05C13FEC2C6E35290007D817 /* CameraManager.swift */,
 				05C13FFA2C709C960007D817 /* StorageManager.swift */,
+				051AE87F2C72289700009F67 /* ImageCacheManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -149,6 +163,7 @@
 			children = (
 				05C13FF22C6E97410007D817 /* UIViewExtension.swift */,
 				05C13FF42C6E974F0007D817 /* UIImageExtension.swift */,
+				05C140022C713A8B0007D817 /* DateExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -294,17 +309,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C13FFD2C70BE100007D817 /* Capture.swift in Sources */,
+				05C140032C713A8B0007D817 /* DateExtension.swift in Sources */,
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
 				05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */,
+				051AE8802C72289700009F67 /* ImageCacheManager.swift in Sources */,
 				05C13FFB2C709C960007D817 /* StorageManager.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
 				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
 				05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */,
 				05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */,
 				0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */,
+				05C140052C713C300007D817 /* CapturePreviewViewController.swift in Sources */,
+				05C13FFF2C7100860007D817 /* InfoViewController.swift in Sources */,
 				05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */,
 				05C13FF72C6F5C460007D817 /* CaptureButton.swift in Sources */,
 				05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */,
+				05C140012C71046C0007D817 /* CaptureCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

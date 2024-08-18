@@ -19,6 +19,16 @@ class StorageManager {
         return documentsDirectory.appendingPathComponent(fileName)
     }
     
+    func get(named fileName: String) -> Capture? {
+        let fileURL = imagePath(for: fileName)
+        
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            print("No image found at path: \(fileURL)")
+            return nil
+        }
+        return Capture(fileURL: fileURL)
+    }
+    
     @discardableResult
     func save(with imageData: Data) -> Capture? {
         let fileName = "IMG_\(UUID().uuidString).jpg"
@@ -34,16 +44,7 @@ class StorageManager {
         return nil
     }
     
-    func get(named fileName: String) -> Capture? {
-        let fileURL = imagePath(for: fileName)
-        
-        guard FileManager.default.fileExists(atPath: fileURL.path) else {
-            print("No image found at path: \(fileURL)")
-            return nil
-        }
-        return Capture(fileURL: fileURL)
-    }
-    
+    @discardableResult
     func delete(named fileName: String) -> Bool {
         let fileURL = imagePath(for: fileName)
         

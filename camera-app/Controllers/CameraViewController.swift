@@ -75,11 +75,23 @@ class CameraViewController: UIViewController {
     }()
     
     var isCapturing = false
+    var didAppearOnce = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         requestCameraAccessAndStartSession()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if didAppearOnce {
+            cameraManager.startSession()
+        }
+        didAppearOnce = true
+        if !latestImageView.isHidden {
+            latestImageView.image = StorageManager.shared.getLatest()?.image
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -126,7 +138,6 @@ class CameraViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = isoButton
         navigationItem.rightBarButtonItem = shutterSpeedButton
-
     }
     
     func requestCameraAccessAndStartSession() {
@@ -215,8 +226,8 @@ class CameraViewController: UIViewController {
     }
     
     @objc func infoButtonTapped() {
-        // TODO: Info screen UI
-        print("info button tapped")
+        let infoViewController = InfoViewController()
+        navigationController?.pushViewController(infoViewController, animated: true)
     }
     
     @objc func resetButtonTapped() {
