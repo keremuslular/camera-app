@@ -16,7 +16,7 @@ protocol CameraManagerDelegate: NSObjectProtocol {
 class CameraManager: NSObject {
     weak var delegate: CameraManagerDelegate?
     
-    let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+    let camera = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back)
     var captureSession: AVCaptureSession?
     
     let photoOutput = AVCapturePhotoOutput()
