@@ -6,7 +6,7 @@ This is a custom iOS camera application designed to provide a tailored photo cap
 
 - **Custom Camera Interface**: Designed with a user-friendly and intuitive UI, including a custom capture button and timer.
 - **Manual ISO & Shutter Speed Controls**: Provides the ability to manually set ISO and shutter speed, with real-time adjustments through the UI.
-- **High-Resolution Capture**: Supports high-resolution photo captures, automatically selecting the best camera and settings for your device.
+- **High-Resolution Capture**: Supports high-resolution photo captures for up to 10 minutes, automatically selecting the best camera and settings for your device.
 - **Optimized Memory Management**: Implements an advanced prefetching collection view and downsampling techniques to handle images efficiently without excessive memory usage.
 - **Selective Deletion**: Multiple captured images can be selected and deleted directly from the info screen.
 - **Image Preview & Info Display**: Captured images can be previewed, with detailed information displayed in a pop-up dialog.
