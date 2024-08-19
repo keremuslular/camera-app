@@ -8,15 +8,14 @@
 import UIKit
 
 struct Capture {
-    let image: UIImage
+    let fileURL: URL
     let name: String
     let dimensions: CGSize
     let timestamp: Date
     
     init?(fileURL: URL) {
         guard let image = UIImage(contentsOfFile: fileURL.path) else { return nil }
-        
-        self.image = image
+        self.fileURL = fileURL
         self.name = fileURL.lastPathComponent
         self.dimensions = CGSize(width: image.size.width, height: image.size.height)
         

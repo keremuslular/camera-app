@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051AE8822C73779F00009F67 /* ImageTitleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AE8812C73779F00009F67 /* ImageTitleButton.swift */; };
+		051AE8842C739A3500009F67 /* TimeIntervalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AE8832C739A3500009F67 /* TimeIntervalExtension.swift */; };
+		051AE8862C73DAC600009F67 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AE8852C73DAC500009F67 /* ImageCacheManager.swift */; };
 		0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5262C6D5ABC0017947B /* AppDelegate.swift */; };
 		0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0566F5282C6D5ABC0017947B /* SceneDelegate.swift */; };
 		0566F5302C6D5ABD0017947B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0566F52F2C6D5ABD0017947B /* Assets.xcassets */; };
@@ -16,7 +19,6 @@
 		05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FEE2C6E398B0007D817 /* AlertUtility.swift */; };
 		05C13FF12C6E3B820007D817 /* TopViewControllerUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */; };
 		05C13FF32C6E97410007D817 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF22C6E97410007D817 /* UIViewExtension.swift */; };
-		05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF42C6E974F0007D817 /* UIImageExtension.swift */; };
 		05C13FF72C6F5C460007D817 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF62C6F5C460007D817 /* CaptureButton.swift */; };
 		05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FF82C6F71710007D817 /* CaptureTimerView.swift */; };
 		05C13FFB2C709C960007D817 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C13FFA2C709C960007D817 /* StorageManager.swift */; };
@@ -29,6 +31,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		051AE8812C73779F00009F67 /* ImageTitleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTitleButton.swift; sourceTree = "<group>"; };
+		051AE8832C739A3500009F67 /* TimeIntervalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalExtension.swift; sourceTree = "<group>"; };
+		051AE8852C73DAC500009F67 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		0566F5232C6D5ABC0017947B /* camera-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "camera-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0566F5262C6D5ABC0017947B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0566F5282C6D5ABC0017947B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,7 +45,6 @@
 		05C13FEE2C6E398B0007D817 /* AlertUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertUtility.swift; sourceTree = "<group>"; };
 		05C13FF02C6E3B820007D817 /* TopViewControllerUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopViewControllerUtility.swift; sourceTree = "<group>"; };
 		05C13FF22C6E97410007D817 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
-		05C13FF42C6E974F0007D817 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		05C13FF62C6F5C460007D817 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
 		05C13FF82C6F71710007D817 /* CaptureTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTimerView.swift; sourceTree = "<group>"; };
 		05C13FFA2C709C960007D817 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 				05C13FF62C6F5C460007D817 /* CaptureButton.swift */,
 				05C13FF82C6F71710007D817 /* CaptureTimerView.swift */,
 				05C140002C71046C0007D817 /* CaptureCollectionViewCell.swift */,
+				051AE8812C73779F00009F67 /* ImageTitleButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 			children = (
 				05C13FEC2C6E35290007D817 /* CameraManager.swift */,
 				05C13FFA2C709C960007D817 /* StorageManager.swift */,
+				051AE8852C73DAC500009F67 /* ImageCacheManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -159,8 +165,8 @@
 			isa = PBXGroup;
 			children = (
 				05C13FF22C6E97410007D817 /* UIViewExtension.swift */,
-				05C13FF42C6E974F0007D817 /* UIImageExtension.swift */,
 				05C140022C713A8B0007D817 /* DateExtension.swift */,
+				051AE8832C739A3500009F67 /* TimeIntervalExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 				05C140032C713A8B0007D817 /* DateExtension.swift in Sources */,
 				0566F53B2C6D5D770017947B /* CameraViewController.swift in Sources */,
 				05C13FF92C6F71710007D817 /* CaptureTimerView.swift in Sources */,
+				051AE8822C73779F00009F67 /* ImageTitleButton.swift in Sources */,
 				05C13FFB2C709C960007D817 /* StorageManager.swift in Sources */,
 				0566F5272C6D5ABC0017947B /* AppDelegate.swift in Sources */,
 				05C13FED2C6E35290007D817 /* CameraManager.swift in Sources */,
@@ -317,9 +324,10 @@
 				0566F5292C6D5ABC0017947B /* SceneDelegate.swift in Sources */,
 				05C140052C713C300007D817 /* CapturePreviewViewController.swift in Sources */,
 				05C13FFF2C7100860007D817 /* InfoViewController.swift in Sources */,
+				051AE8842C739A3500009F67 /* TimeIntervalExtension.swift in Sources */,
+				051AE8862C73DAC600009F67 /* ImageCacheManager.swift in Sources */,
 				05C13FEF2C6E398B0007D817 /* AlertUtility.swift in Sources */,
 				05C13FF72C6F5C460007D817 /* CaptureButton.swift in Sources */,
-				05C13FF52C6E974F0007D817 /* UIImageExtension.swift in Sources */,
 				05C140012C71046C0007D817 /* CaptureCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -50,21 +50,25 @@ class CameraViewController: UIViewController {
         return btn
     }()
     
-    lazy var infoButton: UIButton = {
-        let btn = UIButton()
-        btn.backgroundColor = .white
-        btn.cornerRadius(radius: 20.0)
-        btn.setImage(UIImage(named: "ic_info"), for: .normal)
+    lazy var infoButton: ImageTitleButton = {
+        let btn = ImageTitleButton()
+        btn.type = .info
         btn.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         return btn
     }()
     
-    lazy var resetButton: UIButton = {
-        let btn = UIButton()
-        btn.backgroundColor = .white
-        btn.cornerRadius(radius: 20.0)
-        btn.setImage(UIImage(named: "ic_reset"), for: .normal)
+    lazy var resetButton: ImageTitleButton = {
+        let btn = ImageTitleButton()
+        btn.type = .reset
         btn.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var uploadButton: ImageTitleButton = {
+        let btn = ImageTitleButton()
+        btn.type = .upload
+        btn.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        btn.isHidden = true
         return btn
     }()
     
@@ -90,7 +94,7 @@ class CameraViewController: UIViewController {
         }
         didAppearOnce = true
         if !latestImageView.isHidden {
-            latestImageView.image = StorageManager.shared.getLatest()?.image
+            latestImageView.image = StorageManager.shared.getLatestImage()
         }
     }
     
@@ -102,15 +106,22 @@ class CameraViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .black
         
-        [previewView, latestImageView, captureButton, infoButton, resetButton].forEach(view.addSubview)
+        [previewView, latestImageView, uploadButton, captureButton, infoButton, resetButton].forEach(view.addSubview)
         
         previewView.snp.makeConstraints { make in
-            make.leading.trailing.centerX.centerY.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20.0)
+            make.leading.trailing.centerX.equalToSuperview()
             make.height.equalTo(previewView.snp.width).multipliedBy(4.0 / 3.0)
         }
         
         latestImageView.snp.makeConstraints { make in
             make.edges.equalTo(previewView)
+        }
+        
+        uploadButton.snp.makeConstraints { make in
+            make.top.equalTo(previewView.snp.bottom).offset(20.0)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(40.0)
         }
         
         captureButton.snp.makeConstraints { make in
@@ -122,13 +133,13 @@ class CameraViewController: UIViewController {
         infoButton.snp.makeConstraints { make in
             make.centerY.equalTo(captureButton)
             make.leading.equalToSuperview().inset(40.0)
-            make.width.height.equalTo(40.0)
+            make.width.equalTo(40.0)
         }
         
         resetButton.snp.makeConstraints { make in
             make.centerY.equalTo(captureButton)
             make.trailing.equalToSuperview().inset(40.0)
-            make.width.height.equalTo(40.0)
+            make.width.equalTo(40.0)
         }
         
         timerView.snp.makeConstraints { make in
@@ -168,7 +179,7 @@ class CameraViewController: UIViewController {
                 captureButton.captureState = .paused
                 timerView.pauseTimer()
                 latestImageView.isHidden = false
-                latestImageView.image = StorageManager.shared.getLatest()?.image // FIXME: Ususally gets the second to last photo, because capture is on background thread
+                latestImageView.image = StorageManager.shared.getLatestImage()
             } else {
                 captureButton.captureState = .capturing
                 timerView.startTimer()
@@ -226,15 +237,28 @@ class CameraViewController: UIViewController {
     }
     
     @objc func infoButtonTapped() {
+        if isCapturing {
+            if !cameraManager.isPaused {
+                cameraManager.pauseUnpauseCapturing()
+                captureButton.captureState = .paused
+                timerView.pauseTimer()
+                latestImageView.isHidden = false
+                latestImageView.image = StorageManager.shared.getLatestImage()
+            }
+        }
         let infoViewController = InfoViewController()
+        infoViewController.recordingTime = cameraManager.elapsedTime
         navigationController?.pushViewController(infoViewController, animated: true)
     }
     
     @objc func resetButtonTapped() {
         cameraManager.stopCapturing()
         StorageManager.shared.deleteAll()
+        
         timerView.resetTimer()
+        uploadButton.isHidden = true
         captureButton.captureState = .initial
+        infoButton.captureCount = 0
         isCapturing = false
         latestImageView.isHidden = true
         latestImageView.image = nil
@@ -245,6 +269,8 @@ class CameraViewController: UIViewController {
 
 extension CameraViewController: CameraManagerDelegate {
     func cameraManagerDidCapture(_: CameraManager) {
-        previewView.pulseBorder(for: 0.2, from: .white.withAlphaComponent(0.2))
+        uploadButton.isHidden = false
+        previewView.pulseBorder(for: 0.1, from: .white.withAlphaComponent(0.2))
+        infoButton.increaseCaptureCount()
     }
 }

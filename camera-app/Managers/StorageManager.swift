@@ -56,7 +56,7 @@ class StorageManager {
         }
     }
     
-    func getLatest() -> Capture? {
+    func getLatestImage() -> UIImage? {
         do {
             let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: [.creationDateKey], options: [])
             
@@ -65,8 +65,7 @@ class StorageManager {
                 let date2 = (try? $1.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date.distantPast
                 return date1 > date2
             }).first {
-                
-                return get(named: latestFileURL.lastPathComponent)
+                return UIImage(contentsOfFile: latestFileURL.path)
             }
         } catch {
             print("Error retrieving the latest image: \(error)")
@@ -86,7 +85,7 @@ class StorageManager {
             }).compactMap { get(named: $0.lastPathComponent) }
             
         } catch {
-            print("Error retrieving and sorting captures: \(error)")
+            print("Error retrieving captures: \(error)")
             return []
         }
     }

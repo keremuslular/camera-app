@@ -82,8 +82,12 @@ class CaptureCollectionViewCell: UICollectionViewCell, Reusable {
     
     func prepare(with capture: Capture, selectionEnabled: Bool) {
         self.capture = capture
-        self.imageView.image = capture.image
         self.selectionEnabled = selectionEnabled
+
+        ImageCacheManager.shared.loadImage(from: capture.fileURL, targetSize: contentView.bounds.size) { [weak self] image in
+            guard let self = self, self.capture?.fileURL == capture.fileURL else { return }
+            self.imageView.image = image
+        }
     }
     
     @objc func infoButtonTapped() {
