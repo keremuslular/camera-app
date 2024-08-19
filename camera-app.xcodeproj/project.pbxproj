@@ -479,6 +479,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "camera-app/Resources/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Camera App";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera App needs access to your device's camera to capture images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -512,6 +513,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "camera-app/Resources/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Camera App";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera App needs access to your device's camera to capture images";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
