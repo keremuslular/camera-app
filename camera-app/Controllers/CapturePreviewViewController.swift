@@ -41,7 +41,7 @@ class CapturePreviewViewController: UIViewController {
     var capture: Capture? {
         didSet {
             guard let capture = capture else { return }
-            imageView.image = capture.image
+            imageView.image = UIImage(contentsOfFile: capture.fileURL.path)
             imageView.snp.makeConstraints { make in
                 make.height.equalTo(imageView.snp.width).multipliedBy(capture.dimensions.height / capture.dimensions.width)
             }

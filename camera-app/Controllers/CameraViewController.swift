@@ -86,7 +86,7 @@ class CameraViewController: UIViewController {
         }
         didAppearOnce = true
         if !latestImageView.isHidden {
-            latestImageView.image = StorageManager.shared.getLatest()?.image
+            latestImageView.image = StorageManager.shared.getLatestImage()
         }
     }
     
@@ -164,7 +164,7 @@ class CameraViewController: UIViewController {
                 captureButton.captureState = .paused
                 timerView.pauseTimer()
                 latestImageView.isHidden = false
-                latestImageView.image = StorageManager.shared.getLatest()?.image // FIXME: Ususally gets the second to last photo, because capture is on background thread
+                latestImageView.image = StorageManager.shared.getLatestImage()
             } else {
                 captureButton.captureState = .capturing
                 timerView.startTimer()
@@ -228,7 +228,7 @@ class CameraViewController: UIViewController {
                 captureButton.captureState = .paused
                 timerView.pauseTimer()
                 latestImageView.isHidden = false
-                latestImageView.image = StorageManager.shared.getLatest()?.image
+                latestImageView.image = StorageManager.shared.getLatestImage()
             }
         }
         let infoViewController = InfoViewController()

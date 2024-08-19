@@ -13,6 +13,7 @@ class InfoViewController: UIViewController {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         cv.delegate = self
         cv.dataSource = self
+        cv.prefetchDataSource = self
         cv.register(cellType: CaptureCollectionViewCell.self)
         cv.showsVerticalScrollIndicator = false
         cv.alwaysBounceVertical = true
@@ -143,7 +144,7 @@ class InfoViewController: UIViewController {
     }
 }
 
-extension InfoViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension InfoViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         captures.count
     }
@@ -153,6 +154,15 @@ extension InfoViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.prepare(with: captures[indexPath.item], selectionEnabled: collectionView.allowsMultipleSelection)
         cell.delegate = self
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            let capture = captures[indexPath.item]
+            ImageCacheManager.shared.loadImage(from: capture.fileURL, targetSize: flowLayout.itemSize) { _ in
+                // Image thumbnail cached
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
