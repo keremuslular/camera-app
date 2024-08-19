@@ -16,7 +16,7 @@ protocol CameraManagerDelegate: NSObjectProtocol {
 class CameraManager: NSObject {
     weak var delegate: CameraManagerDelegate?
     
-    let camera = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back)
+    var camera: AVCaptureDevice?
     var captureSession: AVCaptureSession?
     
     let photoOutput = AVCapturePhotoOutput()
@@ -28,7 +28,11 @@ class CameraManager: NSObject {
     var maxCaptureDuration: TimeInterval = 60
     var startTime: Date?
     
-    let targetDimention = CMVideoDimensions(width: 3000, height: 4000)
+    let preferredDimensions = CMVideoDimensions(width: 3000, height: 4000)
+    let preferredCameraTypes: [AVCaptureDevice.DeviceType] = [
+        .builtInTripleCamera,
+        .builtInDualCamera
+    ]
     
     lazy var ISO: Float? = camera?.iso {
         didSet {
@@ -76,7 +80,48 @@ class CameraManager: NSObject {
         }
     }
     
-    // MARK: - Session Functions
+    // MARK: - Camera Setup
+    
+    func setupCamera() -> AVCaptureDevice? {
+        for cameraType in preferredCameraTypes {
+            if let camera = AVCaptureDevice.default(cameraType, for: .video, position: .back) {
+                var closestFormat: AVCaptureDevice.Format?
+                var closestDifference: Int32 = .max
+                
+                for format in camera.formats {
+                    let description = format.formatDescription
+                    let dimensions = CMVideoFormatDescriptionGetDimensions(description)
+                    
+                    let widthDifference = abs(dimensions.width - preferredDimensions.width)
+                    let heightDifference = abs(dimensions.height - preferredDimensions.height)
+                    let totalDifference = widthDifference + heightDifference
+                    
+                    if totalDifference < closestDifference {
+                        closestDifference = totalDifference
+                        closestFormat = format
+                    }
+                }
+                
+                if let bestFormat = closestFormat {
+                    do {
+                        try camera.lockForConfiguration()
+                        camera.activeFormat = bestFormat
+                        camera.unlockForConfiguration()
+                        return camera
+                    } catch {
+                        print("Error setting camera format: \(error)")
+                    }
+                } else {
+                    print("No suitable format found for \(cameraType)")
+                }
+            }
+        }
+        
+        // Fall back to the default wide-angle camera
+        return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+    }
+    
+    // MARK: - Session Setup
     
     func setupSession() {
         captureSession = AVCaptureSession()
@@ -85,14 +130,16 @@ class CameraManager: NSObject {
             return
         }
         
-        captureSession.sessionPreset = .high
+        camera = setupCamera()
         
         guard let camera = camera else {
-            AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
+            AlertUtility.show(title: "Camera Error", message: "Failed to get the camera.")
             return
         }
         
         do {
+            captureSession.sessionPreset = .photo
+
             let input = try AVCaptureDeviceInput(device: camera)
             if captureSession.canAddInput(input) {
                 captureSession.addInput(input)
@@ -105,19 +152,6 @@ class CameraManager: NSObject {
                 captureSession.addOutput(photoOutput)
                 photoOutput.isHighResolutionCaptureEnabled = true
                 photoOutput.maxPhotoQualityPrioritization = .speed
-                if #available(iOS 16.0, *) {
-                    let supportedDimensions = camera.activeFormat.supportedMaxPhotoDimensions
-                    
-                    // Choose closest to targetDimention
-                    let desiredDimensions = targetDimention
-                    if let closestMatch = supportedDimensions.min(by: {
-                        abs($0.width - desiredDimensions.width) + abs($0.height - desiredDimensions.height) <
-                            abs($1.width - desiredDimensions.width) + abs($1.height - desiredDimensions.height)
-                    }) {
-                        photoOutput.maxPhotoDimensions = closestMatch
-                        print("Set maxPhotoDimensions to: \(closestMatch.width)x\(closestMatch.height)")
-                    }
-                }
             } else {
                 AlertUtility.show(title: "Output Error", message: "Failed to add photo output to capture session.")
                 return

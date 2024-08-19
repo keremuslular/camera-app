@@ -28,7 +28,7 @@ class InfoViewController: UIViewController {
         layout.minimumInteritemSpacing = spacing
         layout.scrollDirection = .vertical
         let width = (UIScreen.main.bounds.width - (spacing * CGFloat(columnCount - 1))) / CGFloat(columnCount)
-        layout.itemSize = CGSize(width: CGFloat(width), height: CGFloat(width))
+        layout.itemSize = CGSize(width: CGFloat(width), height: CGFloat(width * (4.0 / 3.0)))
         return layout
     }()
     
@@ -176,7 +176,7 @@ extension InfoViewController: CaptureCollectionViewCellDelegate {
     func captureCollectionViewCell(_ cell: CaptureCollectionViewCell, didTapInfoOf capture: Capture) {
         let alertController = UIAlertController(
             title: capture.name,
-            message: "Dimensions: \(Int(capture.dimensions.width))x\(Int(capture.dimensions.height))\nDate: \(capture.timestamp.formattedString())",
+            message: "Resolution: \(Int(capture.dimensions.width))x\(Int(capture.dimensions.height))\nDate: \(capture.timestamp.formattedString())",
             preferredStyle: .actionSheet
         )
         

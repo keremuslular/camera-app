@@ -21,10 +21,20 @@ class CapturePreviewViewController: UIViewController {
         return iv
     }()
     
-    lazy var infoButton: UIButton = {
-        let btn = UIButton(type: .infoLight)
-        btn.tintColor = .white
-        btn.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+    let infoLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.numberOfLines = 0
+        lbl.textAlignment = .center
+        return lbl
+    }()
+    
+    lazy var deleteButton: UIButton = {
+        let btn = UIButton()
+        btn.cornerRadius(radius: 10.0)
+        btn.border(width: 1.0, color: .white)
+        btn.backgroundColor = .red.withAlphaComponent(0.8)
+        btn.setTitle("Delete", for: .normal)
+        btn.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -35,6 +45,10 @@ class CapturePreviewViewController: UIViewController {
             imageView.snp.makeConstraints { make in
                 make.height.equalTo(imageView.snp.width).multipliedBy(capture.dimensions.height / capture.dimensions.width)
             }
+            
+            let text = NSMutableAttributedString(string: capture.name, attributes: [.font: UIFont.systemFont(ofSize: 16.0, weight: .bold), .foregroundColor: UIColor.white])
+            text.append(NSAttributedString(string: "\n\nResolution: \(capture.dimensions)\n\nDate: \(capture.timestamp.formattedString())", attributes: [.font: UIFont.systemFont(ofSize: 14.0, weight: .semibold), .foregroundColor: UIColor.white]))
+            infoLabel.attributedText = text
         }
     }
     
@@ -48,43 +62,28 @@ class CapturePreviewViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .black
         
-        [imageView, infoButton].forEach(view.addSubview)
+        [imageView, infoLabel, deleteButton].forEach(view.addSubview)
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(50.0)
+            make.top.leading.trailing.equalToSuperview().inset(20.0)
+            make.height.equalTo(imageView.snp.width).multipliedBy(4.0 / 3.0)
         }
         
-        infoButton.snp.makeConstraints { make in
-            make.top.equalTo(imageView).offset(10.0)
-            make.trailing.equalTo(imageView).offset(-10.0)
-            make.width.height.equalTo(30.0)
+        infoLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(10.0)
+            make.leading.trailing.equalToSuperview()
+        }
+        
+        deleteButton.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(infoLabel.snp.bottom).offset(10.0)
+            make.leading.trailing.equalTo(imageView)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(20.0)
+            make.height.equalTo(80.0)
         }
     }
     
-    @objc func infoButtonTapped() {
+    @objc func deleteButtonTapped() {
         guard let capture = capture else { return }
-        let alertController = UIAlertController(
-            title: capture.name,
-            message: "Dimensions: \(Int(capture.dimensions.width))x\(Int(capture.dimensions.height))\nDate: \(capture.timestamp.formattedString())",
-            preferredStyle: .actionSheet
-        )
-        
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            guard let self = self else { return }
-            self.delegate?.capturePreviewViewController(self, didDelete: capture)
-        }
-        alertController.addAction(deleteAction)
-        
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
-        alertController.addAction(dismissAction)
-        
-        alertController.modalPresentationStyle = .popover
-        if let popoverController = alertController.popoverPresentationController {
-            popoverController.sourceView = infoButton
-            popoverController.sourceRect = infoButton.bounds
-            popoverController.permittedArrowDirections = .any
-        }
-        
-        present(alertController, animated: true, completion: nil)
+        delegate?.capturePreviewViewController(self, didDelete: capture)
     }
 }
