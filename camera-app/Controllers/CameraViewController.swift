@@ -64,6 +64,14 @@ class CameraViewController: UIViewController {
         return btn
     }()
     
+    lazy var uploadButton: ImageTitleButton = {
+        let btn = ImageTitleButton()
+        btn.type = .upload
+        btn.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        btn.isHidden = true
+        return btn
+    }()
+    
     lazy var cameraManager: CameraManager = {
         let manager = CameraManager()
         manager.delegate = self
@@ -98,15 +106,22 @@ class CameraViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .black
         
-        [previewView, latestImageView, captureButton, infoButton, resetButton].forEach(view.addSubview)
+        [previewView, latestImageView, uploadButton, captureButton, infoButton, resetButton].forEach(view.addSubview)
         
         previewView.snp.makeConstraints { make in
-            make.leading.trailing.centerX.centerY.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20.0)
+            make.leading.trailing.centerX.equalToSuperview()
             make.height.equalTo(previewView.snp.width).multipliedBy(4.0 / 3.0)
         }
         
         latestImageView.snp.makeConstraints { make in
             make.edges.equalTo(previewView)
+        }
+        
+        uploadButton.snp.makeConstraints { make in
+            make.top.equalTo(previewView.snp.bottom).offset(20.0)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(40.0)
         }
         
         captureButton.snp.makeConstraints { make in
@@ -241,6 +256,7 @@ class CameraViewController: UIViewController {
         StorageManager.shared.deleteAll()
         
         timerView.resetTimer()
+        uploadButton.isHidden = true
         captureButton.captureState = .initial
         infoButton.captureCount = 0
         isCapturing = false
@@ -253,6 +269,7 @@ class CameraViewController: UIViewController {
 
 extension CameraViewController: CameraManagerDelegate {
     func cameraManagerDidCapture(_: CameraManager) {
+        uploadButton.isHidden = false
         previewView.pulseBorder(for: 0.1, from: .white.withAlphaComponent(0.2))
         infoButton.increaseCaptureCount()
     }

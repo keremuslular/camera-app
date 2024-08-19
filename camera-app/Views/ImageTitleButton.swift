@@ -12,6 +12,7 @@ class ImageTitleButton: UIButton {
     enum ButtonType {
         case info
         case reset
+        case upload
     }
     
     var type: ButtonType? {
@@ -19,11 +20,14 @@ class ImageTitleButton: UIButton {
             guard let type = type else { return }
             switch type {
             case .info:
-                buttonImageView.image = UIImage(named: "ic_info")
+                buttonImageView.image = UIImage(named: "ic_info")?.withRenderingMode(.alwaysTemplate)
                 buttonTitleLabel.text = "Captures\n(\(captureCount))"
             case .reset:
-                buttonImageView.image = UIImage(named: "ic_reset")
+                buttonImageView.image = UIImage(named: "ic_reset")?.withRenderingMode(.alwaysTemplate)
                 buttonTitleLabel.text = "Reset"
+            case .upload:
+                buttonImageView.image = UIImage(named: "ic_upload")?.withRenderingMode(.alwaysTemplate)
+                buttonTitleLabel.text = "Upload"
             }
         }
     }
@@ -37,7 +41,6 @@ class ImageTitleButton: UIButton {
     var buttonImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.backgroundColor = .white
         iv.cornerRadius(radius: 20.0)
         return iv
     }()
@@ -62,6 +65,8 @@ class ImageTitleButton: UIButton {
     }
     
     func setupUI() {
+        tintColor = .white
+        
         [buttonImageView, buttonTitleLabel].forEach(addSubview)
         
         buttonImageView.snp.makeConstraints { make in
