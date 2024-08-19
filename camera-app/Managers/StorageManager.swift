@@ -36,7 +36,6 @@ class StorageManager {
         
         do {
             try imageData.write(to: fileURL)
-            print("Image saved to: \(fileURL)")
             return Capture(fileURL: fileURL)
         } catch {
             print("Error saving image: \(error)")
@@ -50,7 +49,6 @@ class StorageManager {
         
         do {
             try FileManager.default.removeItem(at: fileURL)
-            print("Deleted image at path: \(fileURL)")
             return true
         } catch {
             print("Error deleting image: \(error)")
@@ -99,7 +97,6 @@ class StorageManager {
             
             for fileURL in fileURLs {
                 try FileManager.default.removeItem(at: fileURL)
-                print("Deleted file: \(fileURL)")
             }
             
         } catch {

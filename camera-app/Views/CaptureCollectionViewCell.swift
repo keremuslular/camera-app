@@ -23,10 +23,8 @@ class CaptureCollectionViewCell: UICollectionViewCell, Reusable {
         }()
     
     lazy var infoButton: UIButton = {
-        let btn = UIButton()
-        btn.backgroundColor = .white
-        btn.cornerRadius(radius: 10.0)
-        btn.setImage(UIImage(named: "ic_info"), for: .normal)
+        let btn = UIButton(type: .infoDark)
+        btn.tintColor = .white
         btn.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         return btn
     }()
