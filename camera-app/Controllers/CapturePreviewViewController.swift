@@ -32,7 +32,7 @@ class CapturePreviewViewController: UIViewController {
         let btn = UIButton()
         btn.cornerRadius(radius: 10.0)
         btn.border(width: 1.0, color: .white)
-        btn.backgroundColor = .red.withAlphaComponent(0.8)
+        btn.backgroundColor = .red.withAlphaComponent(0.5)
         btn.setTitle("Delete", for: .normal)
         btn.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         return btn
@@ -47,7 +47,7 @@ class CapturePreviewViewController: UIViewController {
             }
             
             let text = NSMutableAttributedString(string: capture.name, attributes: [.font: UIFont.systemFont(ofSize: 16.0, weight: .bold), .foregroundColor: UIColor.white])
-            text.append(NSAttributedString(string: "\n\nResolution: \(capture.dimensions)\n\nDate: \(capture.timestamp.formattedString())", attributes: [.font: UIFont.systemFont(ofSize: 14.0, weight: .semibold), .foregroundColor: UIColor.white]))
+            text.append(NSAttributedString(string: "\n\nResolution: \(Int(capture.dimensions.width))x\(Int(capture.dimensions.height))\n\nDate: \(capture.timestamp.formattedString())", attributes: [.font: UIFont.systemFont(ofSize: 14.0, weight: .semibold), .foregroundColor: UIColor.white]))
             infoLabel.attributedText = text
         }
     }

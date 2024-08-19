@@ -68,6 +68,8 @@ class InfoViewController: UIViewController {
     
     var selectedCaptureNames = Set<String>()
         
+    var recordingTime: TimeInterval?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -95,9 +97,12 @@ class InfoViewController: UIViewController {
             let lbl = UILabel()
             lbl.numberOfLines = 0
             lbl.textAlignment = .center
-            let text = NSMutableAttributedString(string: "Info\n", attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)])
-            text.append(NSAttributedString(string: "Capture count: \(captures.count)", attributes: [.font: UIFont.systemFont(ofSize: 12.0)]))
+            let text = NSMutableAttributedString(string: "Captures: \(captures.count)", attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)])
+            if let resolution = captures.first?.dimensions, let recordingTime = recordingTime {
+                text.append(NSAttributedString(string: "\nResolution: \(Int(resolution.width))x\(Int(resolution.height)), Duration: \(recordingTime.asTimerText())", attributes: [.font: UIFont.systemFont(ofSize: 12.0)]))
+            }
             lbl.attributedText = text
+            lbl.adjustsFontSizeToFitWidth = true
             return lbl
         }()
         navigationItem.titleView = titleLabel

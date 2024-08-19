@@ -26,7 +26,11 @@ class CaptureTimerView: UIView {
     }()
     
     var timer: Timer?
-    var elapsedTime: TimeInterval = 0
+    var elapsedTime: TimeInterval = 0 {
+        didSet {
+            timerLabel.text = elapsedTime.asTimerText()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,16 +71,12 @@ class CaptureTimerView: UIView {
     func resetTimer() {
         timer?.invalidate()
         elapsedTime = 0
-        timerLabel.text = "00:00"
         timerLabel.isHidden = true
         recordView.isHidden = true
     }
     
     @objc func updateTimer() {
         elapsedTime += 1
-        let minutes = Int(elapsedTime) / 60
-        let seconds = Int(elapsedTime) % 60
-        timerLabel.text = String(format: "%02d:%02d", minutes, seconds)
     }
 }
 

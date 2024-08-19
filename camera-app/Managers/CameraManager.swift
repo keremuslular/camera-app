@@ -25,7 +25,6 @@ class CameraManager: NSObject {
     var captureTimer: Timer?
     var isPaused = false
     var elapsedTime: TimeInterval = 0
-    var maxCaptureDuration: TimeInterval = 60
     var startTime: Date?
     
     let preferredDimensions = CMVideoDimensions(width: 3000, height: 4000)
@@ -34,7 +33,7 @@ class CameraManager: NSObject {
         .builtInDualCamera
     ]
     
-    lazy var ISO: Float? = camera?.iso {
+     var ISO: Float? {
         didSet {
             guard let camera = camera else {
                 AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
@@ -56,7 +55,7 @@ class CameraManager: NSObject {
         }
     }
     
-    lazy var shutterSpeed: Double? = camera?.exposureDuration.seconds {
+     var shutterSpeed: Double? {
         didSet {
             guard let camera = camera else {
                 AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
@@ -78,6 +77,15 @@ class CameraManager: NSObject {
                 print("Error setting shutter speed: \(error)")
             }
         }
+    }
+    
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(applicaitonWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willTerminateNotification, object: nil)
     }
     
     // MARK: - Camera Setup
@@ -211,14 +219,6 @@ class CameraManager: NSObject {
         
         startTime = Date()
         captureTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(capturePhoto), userInfo: nil, repeats: true)
-        scheduleCaptureStop()
-    }
-    
-    func scheduleCaptureStop() {
-        let remainingTime = maxCaptureDuration - elapsedTime
-        DispatchQueue.main.asyncAfter(deadline: .now() + remainingTime) {
-            self.stopCapturing()
-        }
     }
     
     func stopCapturing() {
@@ -241,6 +241,11 @@ class CameraManager: NSObject {
             }
         }
         isPaused.toggle()
+    }
+    
+    @objc func applicaitonWillTerminate() {
+        stopCapturing()
+        StorageManager.shared.deleteAll()
     }
     
     func getSupportedISOs() -> [Float] {

@@ -52,7 +52,7 @@ class CaptureButton: UIButton {
         }
         let pulseAnimation: CABasicAnimation = {
             let anim = CABasicAnimation(keyPath: "transform.scale")
-            anim.duration = 0.8
+            anim.duration = 1.0
             anim.fromValue = 1.1
             anim.toValue = 1.0
             anim.autoreverses = true
