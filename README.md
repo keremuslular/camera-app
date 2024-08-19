@@ -1,4 +1,3 @@
-markdown
 # Camera App
 
 This is a custom iOS camera application designed to provide a tailored photo capturing experience with features like manual ISO and shutter speed adjustments, and optimized image handling. The app is built to utilize the best camera available on the device and operates with a sleek, minimalist interface.
