@@ -197,17 +197,18 @@ class CameraViewController: UIViewController {
     @objc func isoButtonTapped() {
         let alertController = UIAlertController(title: "Select ISO", message: nil, preferredStyle: .actionSheet)
         let isoValues = ["AUTO"] + cameraManager.getSupportedISOs().map { "ISO \(Int($0))" }
-
+        
         isoValues.forEach { iso in
             alertController.addAction(UIAlertAction(title: iso, style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 if iso == "AUTO" {
-                    self.cameraManager.ISO = nil
-                    self.isoButton.title = "ISO: AUTO"
-                    self.shutterSpeedButton.title = "Shutter: AUTO"
+                    self.cameraManager.setISO(nil) { result in
+                        self.handleISOUpdate(result)
+                    }
                 } else if let isoValue = Float(iso.replacingOccurrences(of: "ISO ", with: "")) {
-                    self.cameraManager.ISO = isoValue
-                    self.isoButton.title = "ISO: \(Int(isoValue))"
+                    self.cameraManager.setISO(isoValue) { result in
+                        self.handleISOUpdate(result)
+                    }
                 }
             }))
         }
@@ -218,17 +219,18 @@ class CameraViewController: UIViewController {
     @objc func shutterSpeedButtonTapped() {
         let alertController = UIAlertController(title: "Select Shutter Speed", message: nil, preferredStyle: .actionSheet)
         let shutterSpeeds = ["AUTO"] + cameraManager.getSupportedShutterSpeeds().map { "1/\(Int(1/$0)) sec" }
-
+        
         shutterSpeeds.forEach { speed in
             alertController.addAction(UIAlertAction(title: speed, style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 if speed == "AUTO" {
-                    self.cameraManager.shutterSpeed = nil
-                    self.isoButton.title = "ISO: AUTO"
-                    self.shutterSpeedButton.title = "Shutter: AUTO"
+                    self.cameraManager.setShutterSpeed(nil) { result in
+                        self.handleShutterSpeedUpdate(result)
+                    }
                 } else if let speedValue = Double(speed.replacingOccurrences(of: "1/", with: "").replacingOccurrences(of: " sec", with: "")) {
-                    self.cameraManager.shutterSpeed = speedValue
-                    self.shutterSpeedButton.title = "Shutter: 1/\(Int(speedValue))"
+                    self.cameraManager.setShutterSpeed(speedValue) { result in
+                        self.handleShutterSpeedUpdate(result)
+                    }
                 }
             }))
         }
@@ -264,6 +266,34 @@ class CameraViewController: UIViewController {
         latestImageView.image = nil
         isoButton.title = "ISO: AUTO"
         shutterSpeedButton.title = "Shutter: AUTO"
+    }
+    
+    func handleISOUpdate(_ result: Result<Float?, Error>) {
+        switch result {
+        case .success(let iso):
+            if let iso = iso {
+                isoButton.title = "ISO: \(Int(iso))"
+            } else {
+                isoButton.title = "ISO: AUTO"
+            }
+        case .failure(let error):
+            AlertUtility.show(title: "ISO Update Failed", message: "Error: \(error.localizedDescription)")
+            isoButton.title = "ISO: AUTO"
+        }
+    }
+    
+    func handleShutterSpeedUpdate(_ result: Result<Double?, Error>) {
+        switch result {
+        case .success(let speed):
+            if let speed = speed {
+                shutterSpeedButton.title = "Shutter: 1/\(Int(speed))"
+            } else {
+                shutterSpeedButton.title = "Shutter: AUTO"
+            }
+        case .failure(let error):
+            AlertUtility.show(title: "Shutter Speed Update Failed", message: "Error: \(error.localizedDescription)")
+            shutterSpeedButton.title = "Shutter: AUTO"
+        }
     }
 }
 

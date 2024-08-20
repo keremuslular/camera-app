@@ -33,52 +33,6 @@ class CameraManager: NSObject {
         .builtInDualCamera
     ]
     
-     var ISO: Float? {
-        didSet {
-            guard let camera = camera else {
-                AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
-                return
-            }
-            
-            do {
-                try camera.lockForConfiguration()
-                if let ISO = ISO {
-                    let clampedISO = max(camera.activeFormat.minISO, min(ISO, camera.activeFormat.maxISO))
-                    camera.setExposureModeCustom(duration: camera.exposureDuration, iso: clampedISO, completionHandler: nil)
-                } else {
-                    camera.exposureMode = .continuousAutoExposure
-                }
-                camera.unlockForConfiguration()
-            } catch {
-                print("Error setting ISO: \(error)")
-            }
-        }
-    }
-    
-     var shutterSpeed: Double? {
-        didSet {
-            guard let camera = camera else {
-                AlertUtility.show(title: "Camera Error", message: "Failed to get the default camera.")
-                return
-            }
-            
-            do {
-                try camera.lockForConfiguration()
-                if let shutterSpeed = shutterSpeed  {
-                    let exposureDuration = CMTimeMake(value: 1, timescale: Int32(1/shutterSpeed))
-                    let clampedISO = max(camera.activeFormat.minISO, min(camera.iso, camera.activeFormat.maxISO))
-                    camera.setExposureModeCustom(duration: exposureDuration, iso: clampedISO, completionHandler: nil)
-                } else {
-                    camera.exposureMode = .continuousAutoExposure
-                }
-                camera.unlockForConfiguration()
-                
-            } catch {
-                print("Error setting shutter speed: \(error)")
-            }
-        }
-    }
-    
     override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(applicaitonWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
@@ -127,6 +81,70 @@ class CameraManager: NSObject {
         
         // Fall back to the default wide-angle camera
         return AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+    }
+    
+    func setISO(_ iso: Float?, completion: @escaping (Result<Float?, Error>) -> Void) {
+        guard let camera = camera else {
+            completion(.failure(CameraError.cameraUnavailable))
+            return
+        }
+        
+        do {
+            if let iso = iso {
+                let clampedISO = max(camera.activeFormat.minISO, min(iso, camera.activeFormat.maxISO))
+                try setExposureMode(iso: clampedISO)
+                completion(.success(clampedISO))
+            } else {
+                try camera.lockForConfiguration()
+                camera.exposureMode = .continuousAutoExposure
+                camera.unlockForConfiguration()
+                completion(.success(nil))
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
+    func setShutterSpeed(_ shutterSpeed: Double?, completion: @escaping (Result<Double?, Error>) -> Void) {
+        guard let camera = camera else {
+            completion(.failure(CameraError.cameraUnavailable))
+            return
+        }
+        
+        do {
+            if let shutterSpeed = shutterSpeed  {
+                let exposureDuration = CMTimeMake(value: 1, timescale: Int32(1/shutterSpeed))
+                let clampedISO = max(camera.activeFormat.minISO, min(camera.iso, camera.activeFormat.maxISO))
+                try setExposureMode(duration: exposureDuration, iso: clampedISO)
+                completion(.success(shutterSpeed))
+            } else {
+                try camera.lockForConfiguration()
+                camera.exposureMode = .continuousAutoExposure
+                camera.unlockForConfiguration()
+                completion(.success(nil))
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
+    func setExposureMode(duration: CMTime? = nil, iso: Float? = nil) throws {
+        guard let camera = camera else {
+            throw CameraError.cameraUnavailable
+        }
+
+        if camera.isExposureModeSupported(.custom) {
+            do {
+                try camera.lockForConfiguration()
+                camera.setExposureModeCustom(duration: duration ?? camera.exposureDuration, iso: iso ?? camera.iso)
+                camera.unlockForConfiguration()
+            } catch {
+                camera.unlockForConfiguration()
+                throw CameraError.configurationFailed
+            }
+        } else {
+            throw CameraError.unsupportedExposureMode
+        }
     }
     
     // MARK: - Session Setup
@@ -226,8 +244,6 @@ class CameraManager: NSObject {
         captureTimer = nil
         isPaused = false
         elapsedTime = 0
-        ISO = nil
-        shutterSpeed = nil
     }
     
     func pauseUnpauseCapturing() {
