@@ -227,7 +227,7 @@ class CameraViewController: UIViewController {
                     self.cameraManager.setShutterSpeed(nil) { result in
                         self.handleShutterSpeedUpdate(result)
                     }
-                } else if let speedValue = Double(speed.replacingOccurrences(of: "1/", with: "").replacingOccurrences(of: " sec", with: "")) {
+                } else if let speedValue = Int(speed.replacingOccurrences(of: "1/", with: "").replacingOccurrences(of: " sec", with: "")) {
                     self.cameraManager.setShutterSpeed(speedValue) { result in
                         self.handleShutterSpeedUpdate(result)
                     }
@@ -264,8 +264,6 @@ class CameraViewController: UIViewController {
         isCapturing = false
         latestImageView.isHidden = true
         latestImageView.image = nil
-        isoButton.title = "ISO: AUTO"
-        shutterSpeedButton.title = "Shutter: AUTO"
     }
     
     func handleISOUpdate(_ result: Result<Float?, Error>) {
@@ -275,6 +273,7 @@ class CameraViewController: UIViewController {
                 isoButton.title = "ISO: \(Int(iso))"
             } else {
                 isoButton.title = "ISO: AUTO"
+                shutterSpeedButton.title = "Shutter: AUTO"
             }
         case .failure(let error):
             AlertUtility.show(title: "ISO Update Failed", message: "Error: \(error.localizedDescription)")
@@ -282,13 +281,14 @@ class CameraViewController: UIViewController {
         }
     }
     
-    func handleShutterSpeedUpdate(_ result: Result<Double?, Error>) {
+    func handleShutterSpeedUpdate(_ result: Result<Int?, Error>) {
         switch result {
         case .success(let speed):
             if let speed = speed {
-                shutterSpeedButton.title = "Shutter: 1/\(Int(speed))"
+                shutterSpeedButton.title = "Shutter: 1/\(speed)"
             } else {
                 shutterSpeedButton.title = "Shutter: AUTO"
+                isoButton.title = "ISO: AUTO"
             }
         case .failure(let error):
             AlertUtility.show(title: "Shutter Speed Update Failed", message: "Error: \(error.localizedDescription)")

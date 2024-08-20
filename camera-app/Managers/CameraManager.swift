@@ -47,6 +47,11 @@ class CameraManager: NSObject {
     func setupCamera() -> AVCaptureDevice? {
         for cameraType in preferredCameraTypes {
             if let camera = AVCaptureDevice.default(cameraType, for: .video, position: .back) {
+                if !camera.isExposureModeSupported(.custom) {
+                    print("Camera \(cameraType.rawValue) does not support custom exposure mode.")
+                    continue
+                }
+                
                 var closestFormat: AVCaptureDevice.Format?
                 var closestDifference: Int32 = .max
                 
@@ -74,8 +79,10 @@ class CameraManager: NSObject {
                         print("Error setting camera format: \(error)")
                     }
                 } else {
-                    print("No suitable format found for \(cameraType)")
+                    print("No suitable format found for \(cameraType.rawValue)")
                 }
+            } else {
+                print("Device does not suppport \(cameraType.rawValue)")
             }
         }
         
@@ -105,7 +112,7 @@ class CameraManager: NSObject {
         }
     }
     
-    func setShutterSpeed(_ shutterSpeed: Double?, completion: @escaping (Result<Double?, Error>) -> Void) {
+    func setShutterSpeed(_ shutterSpeed: Int?, completion: @escaping (Result<Int?, Error>) -> Void) {
         guard let camera = camera else {
             completion(.failure(CameraError.cameraUnavailable))
             return
@@ -113,7 +120,7 @@ class CameraManager: NSObject {
         
         do {
             if let shutterSpeed = shutterSpeed  {
-                let exposureDuration = CMTimeMake(value: 1, timescale: Int32(1/shutterSpeed))
+                let exposureDuration = CMTimeMake(value: 1, timescale: Int32(shutterSpeed))
                 let clampedISO = max(camera.activeFormat.minISO, min(camera.iso, camera.activeFormat.maxISO))
                 try setExposureMode(duration: exposureDuration, iso: clampedISO)
                 completion(.success(shutterSpeed))
