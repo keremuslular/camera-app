@@ -330,4 +330,8 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
         }
         delegate?.cameraManagerDidCapture(self)
     }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        AudioServicesDisposeSystemSoundID(1108)
+    }
 }

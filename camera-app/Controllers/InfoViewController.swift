@@ -29,7 +29,8 @@ class InfoViewController: UIViewController {
         layout.minimumInteritemSpacing = spacing
         layout.scrollDirection = .vertical
         let width = (UIScreen.main.bounds.width - (spacing * CGFloat(columnCount - 1))) / CGFloat(columnCount)
-        layout.itemSize = CGSize(width: CGFloat(width), height: CGFloat(width * (4.0 / 3.0)))
+        let floored = floor(width)
+        layout.itemSize = CGSize(width: CGFloat(floored), height: CGFloat(floored * (4.0 / 3.0)))
         return layout
     }()
     
